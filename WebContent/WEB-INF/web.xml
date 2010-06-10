@@ -15,7 +15,7 @@
 		<init-param>
 			<description>Vaadin application class to start</description>
 			<param-name>application</param-name>
-			<param-value>org.vaadin.artur.icepush.example.IcepushaddonApplication</param-value>
+			<param-value>org.vaadin.artur.icepush.example.ICEPushDemo</param-value>
 		</init-param>
 		<init-param>
 			<description>Application widgetset</description>
@@ -23,15 +23,7 @@
 			<param-value>org.vaadin.artur.icepush.IcepushaddonWidgetset</param-value>
 		</init-param>
 	</servlet>
-	<!--<filter>
-	 <filter-name>ICEPush</filter-name>
-	 <filter-class></filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>ICEPush</filter-name>
-		<url-pattern>*.icepush</url-pattern>
-	</filter-mapping>
-	--><servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>Icepushaddon Application</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
