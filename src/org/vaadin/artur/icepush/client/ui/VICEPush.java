@@ -4,23 +4,25 @@ import org.icepush.gwt.client.GWTPushContext;
 import org.icepush.gwt.client.PushEventListener;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.terminal.gwt.client.ApplicationConnection;
 import com.vaadin.terminal.gwt.client.Paintable;
 import com.vaadin.terminal.gwt.client.UIDL;
+import com.vaadin.terminal.gwt.client.VConsole;
 
-/**
- * Client side widget which communicates with the server. Messages from the
- * server are shown as HTML and mouse clicks are sent to the server.
- */
 public class VICEPush extends Widget implements Paintable {
 
     /** Set the CSS class name to allow styling. */
     public static final String CLASSNAME = "v-icepush";
 
-    public static final String PUSH_URL = "pushUrl";
     public static final String PUSH_GROUP = "pushGroup";
+
+    public static final String ICEPUSH_JS_LOCATION = "codeLocation";
 
     /** The client side widget identifier */
     protected String paintableId;
@@ -62,17 +64,32 @@ public class VICEPush extends Widget implements Paintable {
         // Save the client side identifier (paintable id) for the widget
         paintableId = uidl.getId();
 
+        // Must be done after push context path has been set
+        injectScriptIfNeeded(uidl.getStringAttribute(ICEPUSH_JS_LOCATION));
+
         pushGroup = uidl.getStringAttribute(PUSH_GROUP);
 
         if (listener == null) {
-            listener = registerPushListener(pushGroup);
+            DeferredCommand.addCommand(new Command() {
+
+                @Override
+                public void execute() {
+                    if (scriptHasBeenInjected()) {
+                        listener = registerPushListener(pushGroup);
+                    } else {
+                        DeferredCommand.addCommand(this);
+                    }
+
+                }
+            });
+
         }
     }
 
     public class ICEPushListener extends PushEventListener {
         @Override
         public void onPushEvent() {
-            ApplicationConnection.getConsole().log("Push event received");
+            VConsole.log("Push event received");
             client.updateVariable(paintableId, "pushEvent", PUSH_GROUP, true);
         }
     }
@@ -84,4 +101,27 @@ public class VICEPush extends Widget implements Paintable {
         return pl;
     }
 
+    private boolean injectScriptIfNeeded(String codeLocation) {
+        if (scriptHasBeenInjected()) {
+            return false;
+        }
+
+        if (codeLocation == null) {
+            // widgetset directory -> servlet
+            codeLocation = "../../../code.icepush";
+        }
+        ScriptElement se = Document.get().createScriptElement();
+        se.setId("VICEPush-code-inject");
+        se.setSrc(codeLocation);
+        se.setLang("JavaScript");
+        RootPanel.get().getElement().appendChild(se);
+
+        return true;
+    }
+
+    //
+    private native boolean scriptHasBeenInjected()
+    /*-{
+        return (typeof $wnd.ice != 'undefined');
+    }-*/;
 }
