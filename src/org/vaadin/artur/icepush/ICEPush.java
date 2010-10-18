@@ -2,6 +2,9 @@ package org.vaadin.artur.icepush;
 
 import java.util.Map;
 
+import javax.portlet.PortletContext;
+import javax.servlet.ServletContext;
+
 import org.icepush.PushContext;
 import org.vaadin.artur.icepush.client.ui.VICEPush;
 
@@ -9,6 +12,7 @@ import com.vaadin.Application;
 import com.vaadin.service.ApplicationContext;
 import com.vaadin.terminal.PaintException;
 import com.vaadin.terminal.PaintTarget;
+import com.vaadin.terminal.gwt.server.PortletApplicationContext2;
 import com.vaadin.terminal.gwt.server.WebApplicationContext;
 import com.vaadin.ui.AbstractComponent;
 
@@ -53,14 +57,24 @@ public class ICEPush extends AbstractComponent {
         }
 
         // Push changes
-        ApplicationContext context = app.getContext();
+        getPushContext(app.getContext()).push(ICEPush.PUSH_GROUP);
+    }
+
+    public static synchronized PushContext getPushContext(
+            ApplicationContext context) {
         if (context instanceof WebApplicationContext) {
-            PushContext pushContext = PushContext
-                    .getInstance(((WebApplicationContext) context)
-                            .getHttpSession().getServletContext());
-            pushContext.push(ICEPush.PUSH_GROUP);
+            ServletContext servletContext = ((WebApplicationContext) context)
+                    .getHttpSession().getServletContext();
+            return (PushContext) servletContext.getAttribute(PushContext.class
+                    .getName());
+        } else if (context instanceof PortletApplicationContext2) {
+            PortletContext portletContext = ((PortletApplicationContext2) context)
+                    .getPortletSession().getPortletContext();
+            return (PushContext) portletContext.getAttribute(PushContext.class
+                    .getName());
         } else {
-            throw new RuntimeException("Only servlet deployment is supported");
+            throw new RuntimeException(
+                    "Could not find PushContext from session");
         }
     }
 

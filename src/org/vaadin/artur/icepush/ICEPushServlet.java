@@ -14,11 +14,23 @@ import com.vaadin.terminal.gwt.server.ApplicationServlet;
 public class ICEPushServlet extends ApplicationServlet {
 
     private MainServlet ICEPushServlet;
+
     private JavascriptProvider javascriptProvider;
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
-        super.init(servletConfig);
+        try {
+            super.init(servletConfig);
+        } catch (ServletException e) {
+            if (e.getMessage().equals(
+                    "Application not specified in servlet parameters")) {
+                // Ignore if application is not specified to allow the same
+                // servlet to be used for only push in portals
+            } else {
+                throw e;
+            }
+        }
+
         ICEPushServlet = new MainServlet(servletConfig.getServletContext());
 
         try {
