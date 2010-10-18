@@ -1807,7 +1807,7 @@ function AsyncConnection(logger, windowID, receiveURI) {
                 uriPrefix: ''
             }
         };
-        function Bridge(configuration) {
+        namespace.bridge = function Bridge(configuration) {
             var windowID = configuration.window;
             var logger = childLogger(namespace.logger, windowID);
             var commandDispatcher = CommandDispatcher();
@@ -1885,13 +1885,12 @@ function AsyncConnection(logger, windowID, receiveURI) {
                 broadcast(blockingConnectionUnstableListeners);
             });
             info(logger, 'bridge loaded!');
-        }
-        onLoad(window, function() {
-            Bridge({window: namespace.windowID, connection: {}});
-        });
+        };
         onKeyPress(document, function(ev) {
             var e = $event(ev);
             if (isEscKey(e)) cancelDefaultAction(e);
         });
     })(window.ice);
 }
+
+ice.bridge({window: ice.windowID, connection: {}});

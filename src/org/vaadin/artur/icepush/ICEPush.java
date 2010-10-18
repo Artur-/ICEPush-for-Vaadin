@@ -19,13 +19,18 @@ import com.vaadin.ui.AbstractComponent;
 public class ICEPush extends AbstractComponent {
 
     public static final String PUSH_GROUP = "ICEPush-1";
+    private static String codeJavascriptLocation;
 
     @Override
     public void paintContent(PaintTarget target) throws PaintException {
         super.paintContent(target);
 
-        target.addAttribute(VICEPush.PUSH_URL, "/abc");
         target.addAttribute(VICEPush.PUSH_GROUP, PUSH_GROUP);
+        if (codeJavascriptLocation != null) {
+            target.addAttribute(VICEPush.ICEPUSH_JS_LOCATION,
+                    codeJavascriptLocation);
+        }
+
     }
 
     /**
@@ -57,5 +62,9 @@ public class ICEPush extends AbstractComponent {
         } else {
             throw new RuntimeException("Only servlet deployment is supported");
         }
+    }
+
+    public static void setCodeJavascriptLocation(String url) {
+        codeJavascriptLocation = url;
     }
 }
