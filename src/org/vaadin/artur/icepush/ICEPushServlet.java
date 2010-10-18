@@ -14,16 +14,35 @@ import com.vaadin.terminal.gwt.server.ApplicationServlet;
 public class ICEPushServlet extends ApplicationServlet {
 
     private MainServlet ICEPushServlet;
+    private JavascriptProvider javascriptProvider;
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
         ICEPushServlet = new MainServlet(servletConfig.getServletContext());
+
+        try {
+            javascriptProvider = new JavascriptProvider(getServletContext()
+                    .getContextPath());
+
+            ICEPush.setCodeJavascriptLocation(javascriptProvider
+                    .getCodeLocation());
+        } catch (IOException e) {
+            throw new ServletException("Error initializing JavascriptProvider",
+                    e);
+        }
     }
 
     @Override
     protected void service(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
+        if (request.getPathInfo()
+                .equals("/" + javascriptProvider.getCodeName())) {
+            // Serve icepush.js
+            serveIcePushCode(request, response);
+            return;
+        }
+
         if (request.getRequestURI().endsWith(".icepush")) {
             // Push request
             try {
@@ -39,6 +58,15 @@ public class ICEPushServlet extends ApplicationServlet {
             // Vaadin request
             super.service(request, response);
         }
+    }
+
+    private void serveIcePushCode(HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+
+        String icepushJavscript = javascriptProvider.getJavaScript();
+
+        response.setHeader("Content-Type", "text/javascript");
+        response.getOutputStream().write(icepushJavscript.getBytes());
     }
 
     @Override
