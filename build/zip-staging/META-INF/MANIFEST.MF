@@ -4,5 +4,5 @@ Implementation-Version: 0.2.0
 Vaadin-Package-Version: 1
 Class-Path: 
 Vaadin-Widgetsets: org.vaadin.artur.icepush.IcepushaddonWidgetset
-Vaadin-Addon: icepush-0.1.1.jar
+Vaadin-Addon: icepush-0.2.0.jar
 
