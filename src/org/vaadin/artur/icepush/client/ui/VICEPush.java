@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.terminal.gwt.client.ApplicationConnection;
 import com.vaadin.terminal.gwt.client.Paintable;
 import com.vaadin.terminal.gwt.client.UIDL;
-import com.vaadin.terminal.gwt.client.VConsole;
 
 public class VICEPush extends Widget implements Paintable {
 
@@ -87,9 +86,10 @@ public class VICEPush extends Widget implements Paintable {
     }
 
     public class ICEPushListener extends PushEventListener {
+        @SuppressWarnings("deprecation")
         @Override
         public void onPushEvent() {
-            VConsole.log("Push event received");
+            ApplicationConnection.getConsole().log("Push event received");
             client.updateVariable(paintableId, "pushEvent", PUSH_GROUP, true);
         }
     }
