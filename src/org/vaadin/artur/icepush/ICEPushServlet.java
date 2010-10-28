@@ -48,8 +48,9 @@ public class ICEPushServlet extends ApplicationServlet {
     @Override
     protected void service(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        if (request.getPathInfo()
-                .equals("/" + javascriptProvider.getCodeName())) {
+        String pathInfo = request.getPathInfo();
+        if (pathInfo != null
+                && pathInfo.equals("/" + javascriptProvider.getCodeName())) {
             // Serve icepush.js
             serveIcePushCode(request, response);
             return;
