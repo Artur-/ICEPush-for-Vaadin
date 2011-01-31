@@ -71,7 +71,6 @@ public class VICEPush extends Widget implements Paintable {
         if (listener == null) {
             DeferredCommand.addCommand(new Command() {
 
-                @Override
                 public void execute() {
                     if (scriptHasBeenInjected()) {
                         listener = registerPushListener(pushGroup);
