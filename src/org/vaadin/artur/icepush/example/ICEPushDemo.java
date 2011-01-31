@@ -4,10 +4,10 @@ import org.vaadin.artur.icepush.ICEPush;
 
 import com.vaadin.Application;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Window;
 
 public class ICEPushDemo extends Application {
 
@@ -25,7 +25,6 @@ public class ICEPushDemo extends Application {
         getMainWindow().addComponent(
                 new Button("Do stuff in the background", new ClickListener() {
 
-                    @Override
                     public void buttonClick(ClickEvent event) {
                         getMainWindow()
                                 .addComponent(
