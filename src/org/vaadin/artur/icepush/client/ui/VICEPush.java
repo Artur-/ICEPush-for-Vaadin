@@ -101,6 +101,11 @@ public class VICEPush extends Widget implements Paintable {
         return pl;
     }
 
+    private void unregisterPushListener(ICEPushListener listener) {
+        GWTPushContext context = GWTPushContext.getInstance();
+        context.removePushEventListener(listener);
+    }
+
     private boolean injectScriptIfNeeded(String codeLocation) {
         if (scriptHasBeenInjected()) {
             return false;
@@ -124,4 +129,11 @@ public class VICEPush extends Widget implements Paintable {
     /*-{
         return (typeof $wnd.ice != 'undefined');
     }-*/;
+
+    @Override
+    protected void onDetach() {
+        super.onDetach();
+        if (listener != null)
+            unregisterPushListener(listener);
+    }
 }
