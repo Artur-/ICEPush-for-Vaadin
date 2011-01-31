@@ -57,7 +57,12 @@ public class ICEPush extends AbstractComponent {
         }
 
         // Push changes
-        getPushContext(app.getContext()).push(ICEPush.PUSH_GROUP);
+        PushContext pushContext = getPushContext(app.getContext());
+        if (pushContext == null) {
+            throw new RuntimeException(
+                    "PushContext not initialized. Did you forget to use ICEPushServlet?");
+        }
+        pushContext.push(ICEPush.PUSH_GROUP);
     }
 
     public static synchronized PushContext getPushContext(
