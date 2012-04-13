@@ -14,7 +14,7 @@
 		<servlet-class>org.vaadin.artur.icepush.ICEPushServlet</servlet-class>
 		<init-param>
 			<description>Vaadin application class to start</description>
-			<param-name>application</param-name>
+			<param-name>root</param-name>
 			<param-value>org.vaadin.artur.icepush.example.ICEPushDemo</param-value>
 		</init-param>
 		<init-param>

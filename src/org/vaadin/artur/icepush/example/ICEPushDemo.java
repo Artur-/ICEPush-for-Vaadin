@@ -2,41 +2,42 @@ package org.vaadin.artur.icepush.example;
 
 import org.vaadin.artur.icepush.ICEPush;
 
-import com.vaadin.Application;
+import com.vaadin.terminal.WrappedRequest;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.Root;
 
-public class ICEPushDemo extends Application {
+public class ICEPushDemo extends Root {
 
     private ICEPush pusher = new ICEPush();
 
     @Override
-    public void init() {
-        Window mainWindow = new Window("Icepushaddon Application");
-        setMainWindow(mainWindow);
-
+    protected void init(WrappedRequest request) {
         // Add the push component
-        mainWindow.addComponent(pusher);
+        addComponent(pusher);
 
         // Add a button for starting background work
-        getMainWindow().addComponent(
-                new Button("Do stuff in the background", new ClickListener() {
+        addComponent(new Button("Do stuff in the background",
+                new ClickListener() {
 
                     public void buttonClick(ClickEvent event) {
-                        getMainWindow()
-                                .addComponent(
-                                        new Label(
-                                                "Waiting for background process to complete..."));
-                        new BackgroundThread().start();
+                        addComponent(new Label(
+                                "Waiting for background process to complete..."));
+                        new BackgroundThread(Root.getCurrentRoot()).start();
                     }
                 }));
 
     }
 
     public class BackgroundThread extends Thread {
+
+        private Root root;
+
+        public BackgroundThread(Root root) {
+            this.root = root;
+        }
 
         @Override
         public void run() {
@@ -48,7 +49,7 @@ public class ICEPushDemo extends Application {
 
             // Update UI
             synchronized (ICEPushDemo.this) {
-                getMainWindow().addComponent(new Label("All done"));
+                root.addComponent(new Label("All done"));
             }
 
             // Push the changes
