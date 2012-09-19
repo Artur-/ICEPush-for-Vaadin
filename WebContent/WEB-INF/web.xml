@@ -13,8 +13,8 @@
 		<servlet-name>Icepushaddon Application</servlet-name>
 		<servlet-class>org.vaadin.artur.icepush.ICEPushServlet</servlet-class>
 		<init-param>
-			<description>Vaadin application class to start</description>
-			<param-name>root</param-name>
+			<description>Vaadin UI class to start</description>
+			<param-name>UI</param-name>
 			<param-value>org.vaadin.artur.icepush.example.ICEPushDemo</param-value>
 		</init-param>
 		<init-param>

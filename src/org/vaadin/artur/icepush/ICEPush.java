@@ -7,11 +7,11 @@ import org.icepush.PushContext;
 import org.vaadin.artur.icepush.client.ui.ICEPushRpc;
 import org.vaadin.artur.icepush.client.ui.ICEPushState;
 
-import com.vaadin.Application;
-import com.vaadin.service.ApplicationContext;
-import com.vaadin.terminal.gwt.server.PortletApplicationContext2;
-import com.vaadin.terminal.gwt.server.WebApplicationContext;
+import com.vaadin.server.VaadinPortletSession;
+import com.vaadin.server.VaadinServletSession;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.UI;
 
 /**
  * Server side component for the VICEPush widget.
@@ -29,8 +29,8 @@ public class ICEPush extends AbstractComponent {
     };
 
     @Override
-    public void updateState() {
-        super.updateState();
+    public void beforeClientResponse(boolean initial) {
+        super.beforeClientResponse(initial);
         getState().setCodeJavascriptLocation(codeJavascriptLocation);
     }
 
@@ -40,14 +40,14 @@ public class ICEPush extends AbstractComponent {
     }
 
     public void push() {
-        Application app = getApplication();
+        UI app = getUI();
         if (app == null) {
             throw new RuntimeException(
                     "Must be attached to an application to push");
         }
 
         // Push changes
-        PushContext pushContext = getPushContext(app.getContext());
+        PushContext pushContext = getPushContext(app.getSession());
         if (pushContext == null) {
             throw new RuntimeException(
                     "PushContext not initialized. Did you forget to use ICEPushServlet?");
@@ -56,14 +56,14 @@ public class ICEPush extends AbstractComponent {
     }
 
     public static synchronized PushContext getPushContext(
-            ApplicationContext context) {
-        if (context instanceof WebApplicationContext) {
-            ServletContext servletContext = ((WebApplicationContext) context)
+            VaadinSession context) {
+        if (context instanceof VaadinServletSession) {
+            ServletContext servletContext = ((VaadinServletSession) context)
                     .getHttpSession().getServletContext();
             return (PushContext) servletContext.getAttribute(PushContext.class
                     .getName());
-        } else if (context instanceof PortletApplicationContext2) {
-            PortletContext portletContext = ((PortletApplicationContext2) context)
+        } else if (context instanceof VaadinPortletSession) {
+            PortletContext portletContext = ((VaadinPortletSession) context)
                     .getPortletSession().getPortletContext();
             return (PushContext) portletContext.getAttribute(PushContext.class
                     .getName());
@@ -76,4 +76,5 @@ public class ICEPush extends AbstractComponent {
     public static void setCodeJavascriptLocation(String url) {
         codeJavascriptLocation = url;
     }
+
 }

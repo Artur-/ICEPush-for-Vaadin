@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.icepush.servlet.MainServlet;
 
-import com.vaadin.terminal.gwt.server.ApplicationServlet;
+import com.vaadin.server.VaadinServlet;
 
-public class ICEPushServlet extends ApplicationServlet {
+public class ICEPushServlet extends VaadinServlet {
 
     private MainServlet ICEPushServlet;
 

@@ -2,14 +2,14 @@ package org.vaadin.artur.icepush.example;
 
 import org.vaadin.artur.icepush.ICEPush;
 
-import com.vaadin.terminal.WrappedRequest;
+import com.vaadin.server.WrappedRequest;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Root;
+import com.vaadin.ui.UI;
 
-public class ICEPushDemo extends Root {
+public class ICEPushDemo extends UI {
 
     private ICEPush pusher = new ICEPush();
 
@@ -25,7 +25,7 @@ public class ICEPushDemo extends Root {
                     public void buttonClick(ClickEvent event) {
                         addComponent(new Label(
                                 "Waiting for background process to complete..."));
-                        new BackgroundThread(Root.getCurrentRoot()).start();
+                        new BackgroundThread(UI.getCurrent()).start();
                     }
                 }));
 
@@ -33,10 +33,10 @@ public class ICEPushDemo extends Root {
 
     public class BackgroundThread extends Thread {
 
-        private Root root;
+        private UI ui;
 
-        public BackgroundThread(Root root) {
-            this.root = root;
+        public BackgroundThread(UI ui) {
+            this.ui = ui;
         }
 
         @Override
@@ -49,7 +49,7 @@ public class ICEPushDemo extends Root {
 
             // Update UI
             synchronized (ICEPushDemo.this) {
-                root.addComponent(new Label("All done"));
+                ui.addComponent(new Label("All done"));
             }
 
             // Push the changes

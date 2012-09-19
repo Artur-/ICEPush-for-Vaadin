@@ -1,6 +1,7 @@
 package org.vaadin.artur.icepush.client.ui;
 
-import com.vaadin.terminal.gwt.client.ComponentState;
+import com.vaadin.shared.ComponentState;
+
 
 public class ICEPushState extends ComponentState {
     private String pushGroup = "ICEPush-1";
