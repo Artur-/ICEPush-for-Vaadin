@@ -1,0 +1,24 @@
+<ivy-module version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info organisation="com.example" module="v7proj" />
+    <configurations>
+        <conf name="default" />
+        <conf name="widgetset-compile" />
+    </configurations>
+    <dependencies>
+        <!-- The core server part of Vaadin -->
+        <dependency org="com.vaadin" name="vaadin-server"
+            rev="7.0-SNAPSHOT" conf="default->default"/>
+        <!-- The default Vaadin themes -->
+        <dependency org="com.vaadin" name="vaadin-themes-compiled"
+            rev="7.0-SNAPSHOT" />
+        <!-- Precompiled DefaultWidgetSet -->
+        <dependency org="com.vaadin" name="vaadin-client-compiled"
+            rev="7.0-SNAPSHOT" />
+        <!-- Compiler for custom widget sets. Should not be deployed -->
+        <dependency org="com.vaadin" name="vaadin-client-compiler"
+            rev="7.0-SNAPSHOT" conf="widgetset-compile->default" />
+    </dependencies>
+</ivy-module>
+    
