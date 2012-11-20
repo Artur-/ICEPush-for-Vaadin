@@ -4,22 +4,19 @@ import org.icepush.gwt.client.GWTPushContext;
 import org.icepush.gwt.client.PushEventListener;
 import org.vaadin.artur.icepush.ICEPush;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
-import com.vaadin.client.ui.AbstractComponentConnector;
+import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.shared.ui.Connect;
 
-
 @Connect(ICEPush.class)
-public class ICEPushConnector extends AbstractComponentConnector {
+public class ICEPushConnector extends AbstractExtensionConnector {
 
     private ICEPushListener listener = null;
 
@@ -42,11 +39,6 @@ public class ICEPushConnector extends AbstractComponentConnector {
             }
         }, 50);
 
-    }
-
-    @Override
-    protected Widget createWidget() {
-        return GWT.create(InvisibleWidget.class);
     }
 
     @Override

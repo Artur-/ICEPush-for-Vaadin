@@ -7,16 +7,19 @@ import org.icepush.PushContext;
 import org.vaadin.artur.icepush.client.ui.ICEPushRpc;
 import org.vaadin.artur.icepush.client.ui.ICEPushState;
 
-import com.vaadin.server.VaadinPortletSession;
-import com.vaadin.server.VaadinServletSession;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.AbstractComponent;
+import com.vaadin.server.AbstractExtension;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinServiceSession;
+import com.vaadin.server.WrappedHttpSession;
+import com.vaadin.server.WrappedPortletSession;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.UI;
 
 /**
- * Server side component for the VICEPush widget.
+ * Server side extension for ICEPush. Attach to your UI class using
+ * {@link #extend(UI)}
  */
-public class ICEPush extends AbstractComponent {
+public class ICEPush extends AbstractExtension {
 
     private static String codeJavascriptLocation;
 
@@ -40,14 +43,13 @@ public class ICEPush extends AbstractComponent {
     }
 
     public void push() {
-        UI app = getUI();
-        if (app == null) {
-            throw new RuntimeException(
-                    "Must be attached to an application to push");
+        UI ui = getUI();
+        if (ui == null) {
+            throw new RuntimeException("Must be attached to a UI to push");
         }
 
         // Push changes
-        PushContext pushContext = getPushContext(app.getSession());
+        PushContext pushContext = getPushContext(ui.getSession());
         if (pushContext == null) {
             throw new RuntimeException(
                     "PushContext not initialized. Did you forget to use ICEPushServlet?");
@@ -56,14 +58,17 @@ public class ICEPush extends AbstractComponent {
     }
 
     public static synchronized PushContext getPushContext(
-            VaadinSession context) {
-        if (context instanceof VaadinServletSession) {
-            ServletContext servletContext = ((VaadinServletSession) context)
+            VaadinServiceSession vaadinSession) {
+        WrappedSession session = vaadinSession.getSession();
+        // session.getAttribute(PushContext.class.getName());
+        VaadinService service = vaadinSession.getService();
+        if (session instanceof WrappedHttpSession) {
+            ServletContext servletContext = ((WrappedHttpSession) session)
                     .getHttpSession().getServletContext();
             return (PushContext) servletContext.getAttribute(PushContext.class
                     .getName());
-        } else if (context instanceof VaadinPortletSession) {
-            PortletContext portletContext = ((VaadinPortletSession) context)
+        } else if (session instanceof WrappedPortletSession) {
+            PortletContext portletContext = ((WrappedPortletSession) session)
                     .getPortletSession().getPortletContext();
             return (PushContext) portletContext.getAttribute(PushContext.class
                     .getName());
@@ -77,4 +82,13 @@ public class ICEPush extends AbstractComponent {
         codeJavascriptLocation = url;
     }
 
+    /**
+     * Enables push for the given UI
+     * 
+     * @param ui
+     *            the target UI
+     */
+    public void extend(UI ui) {
+        super.extend(ui);
+    }
 }
