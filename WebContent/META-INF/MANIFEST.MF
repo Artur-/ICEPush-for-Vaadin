@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Implementation-Title: ICEPush
-Implementation-Version: 0.5.2
+Implementation-Version: 0.5.3
 Vaadin-Package-Version: 1
-Vaadin-Widgetsets: org.vaadin.artur.icepush.IcepushaddonWidgetset
 Class-Path: 
+Vaadin-Widgetsets: org.vaadin.artur.icepush.IcepushaddonWidgetset
 Vaadin-Addon: icepush-0.1.1.jar
 

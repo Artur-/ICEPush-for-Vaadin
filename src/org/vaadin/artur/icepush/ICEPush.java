@@ -9,7 +9,7 @@ import org.vaadin.artur.icepush.client.ui.ICEPushState;
 
 import com.vaadin.server.AbstractExtension;
 import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServiceSession;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.server.WrappedHttpSession;
 import com.vaadin.server.WrappedPortletSession;
 import com.vaadin.server.WrappedSession;
@@ -58,7 +58,7 @@ public class ICEPush extends AbstractExtension {
     }
 
     public static synchronized PushContext getPushContext(
-            VaadinServiceSession vaadinSession) {
+            VaadinSession vaadinSession) {
         WrappedSession session = vaadinSession.getSession();
         // session.getAttribute(PushContext.class.getName());
         VaadinService service = vaadinSession.getService();

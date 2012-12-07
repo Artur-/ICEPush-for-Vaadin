@@ -1,7 +1,5 @@
 package org.vaadin.artur.icepush.example;
 
-import java.util.concurrent.locks.Lock;
-
 import org.vaadin.artur.icepush.ICEPush;
 
 import com.vaadin.server.VaadinRequest;
@@ -53,13 +51,12 @@ public class ICEPushDemo extends UI {
             }
 
             // Update UI
-            Lock l = ui.getSession().getLock();
+            ui.getSession().lock();
 
-            l.lock();
             try {
                 layout.addComponent(new Label("All done"));
             } finally {
-                l.unlock();
+                ui.getSession().unlock();
             }
 
             // Push the changes
