@@ -9,6 +9,7 @@ import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.vaadin.client.ServerConnector;
 import com.vaadin.client.VConsole;
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
@@ -103,5 +104,10 @@ public class ICEPushConnector extends AbstractExtensionConnector {
             unregisterPushListener(listener);
         }
 
+    }
+
+    @Override
+    protected void extend(ServerConnector target) {
+        // No need to do anything to the UIConnector we extend
     }
 }
