@@ -20,7 +20,7 @@
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"
 			rev="&vaadin.version;" />
-
+		<dependency org="javax.servlet" name="servlet-api" rev="2.5" />
 		<dependency org="javax.portlet" name="portlet-api" rev="2.0" />
 
 		<!-- Compiler for custom widget sets. Should not be deployed -->
