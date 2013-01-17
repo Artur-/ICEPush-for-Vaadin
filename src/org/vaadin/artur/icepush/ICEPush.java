@@ -31,6 +31,9 @@ public class ICEPush extends AbstractExtension {
         }
     };
 
+    public ICEPush() {
+        registerRpc(rpc);
+    }
     @Override
     public void beforeClientResponse(boolean initial) {
         super.beforeClientResponse(initial);
