@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE ivy-module [
-     <!ENTITY vaadin.version "7.0.0.rc1">
+     <!ENTITY vaadin.version "7.4.4">
 ]>
 <ivy-module version="2.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -10,8 +10,10 @@
 	<configurations>
 		<conf name="default" />
 		<conf name="widgetset-compile" />
+		<conf name="nodeploy" />
+		
 	</configurations>
-	<dependencies>
+	<dependencies defaultconf="default" defaultconfmapping="default->default">
 		<!-- The core server part of Vaadin -->
 		<dependency org="com.vaadin" name="vaadin-server" rev="&vaadin.version;"
 			conf="default->default" />
@@ -26,6 +28,10 @@
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
 			rev="&vaadin.version;" conf="widgetset-compile->default" />
+			
+		<!-- Servlet 3.0 API -->
+		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" conf="nodeploy->default" />
+			
 	</dependencies>
 </ivy-module>
     

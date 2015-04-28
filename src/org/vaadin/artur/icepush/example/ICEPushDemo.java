@@ -25,20 +25,21 @@ public class ICEPushDemo extends UI {
         layout.addComponent(new Button("Do stuff in the background",
                 new ClickListener() {
 
-                    public void buttonClick(ClickEvent event) {
-                        layout.addComponent(new Label(
-                                "Waiting for background process to complete..."));
-                        new BackgroundThread(UI.getCurrent()).start();
-                    }
-                }));
+            @Override
+            public void buttonClick(ClickEvent event) {
+                layout.addComponent(new Label(
+                        "Waiting for background process to complete..."));
+                new BackgroundThread(ICEPushDemo.this).start();
+            }
+        }));
 
     }
 
-    public class BackgroundThread extends Thread {
+    public static class BackgroundThread extends Thread {
 
-        private UI ui;
+        private ICEPushDemo ui;
 
-        public BackgroundThread(UI ui) {
+        public BackgroundThread(ICEPushDemo ui) {
             this.ui = ui;
         }
 
@@ -50,17 +51,15 @@ public class ICEPushDemo extends UI {
             } catch (InterruptedException e) {
             }
 
-            // Update UI
-            ui.getSession().lock();
+            ui.access(new Runnable() {
+                @Override
+                public void run() {
+                    ui.layout.addComponent(new Label("All done"));
+                    // Push the changes
+                    ui.pusher.push();
+                }
+            });
 
-            try {
-                layout.addComponent(new Label("All done"));
-            } finally {
-                ui.getSession().unlock();
-            }
-
-            // Push the changes
-            pusher.push();
         }
 
     }
