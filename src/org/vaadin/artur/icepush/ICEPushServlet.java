@@ -86,5 +86,7 @@ public class ICEPushServlet extends VaadinServlet {
     public void destroy() {
         super.destroy();
         ICEPushServlet.shutdown();
+        ICEPushServlet = null;
+        javascriptProvider = null;
     }
 }
